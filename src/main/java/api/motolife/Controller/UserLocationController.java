@@ -5,7 +5,6 @@ import api.motolife.service.UserLocationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,20 +30,19 @@ public class UserLocationController {
 
     @RequestMapping(value = "/updateUserLocation")
     public String updateUserLocation(@RequestParam("username") String username,
-                                     @RequestParam("latitude") Float latitude,
-                                     @RequestParam("longitude") Float longitude){
+                                     @RequestParam("latitude") Double latitude,
+                                     @RequestParam("longitude") Double longitude) {
         UserLocation userLocation;
         userLocation = userLocationService.findFirstByUsername(username);
-        if(!Objects.equals(userLocation,null)) {
+        if (!Objects.equals(userLocation, null)) {
             userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
-            userLocation.setLatitutde(latitude);
+            userLocation.setLatitude(latitude);
             userLocation.setLongitude(longitude);
-        }
-        else{
+        } else {
             userLocation = new UserLocation();
             userLocation.setUsername(username);
             userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
-            userLocation.setLatitutde(latitude);
+            userLocation.setLatitude(latitude);
             userLocation.setLongitude(longitude);
         }
         userLocationService.updateUserLocation(userLocation);

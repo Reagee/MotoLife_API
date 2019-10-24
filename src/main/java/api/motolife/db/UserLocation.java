@@ -27,9 +27,9 @@ public class UserLocation {
 
     @Column(name = "latitude")
     @NotNull
-    private Float latitutde;
+    private Double latitude;
 
     @Column(name = "longitude")
     @NotNull
-    private Float longitude;
+    private Double longitude;
 }
