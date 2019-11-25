@@ -1,7 +1,9 @@
 package api.motolife.Controller;
 
+import api.motolife.db.User;
 import api.motolife.db.UserLocation;
 import api.motolife.service.UserLocationService;
+import api.motolife.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class UserLocationController {
 
     @Autowired
     private UserLocationService userLocationService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/getLocations")
     public String getUserLocations() throws JsonProcessingException {
@@ -29,21 +33,24 @@ public class UserLocationController {
     }
 
     @RequestMapping(value = "/updateUserLocation")
-    public String updateUserLocation(@RequestParam("username") String username,
+    public String updateUserLocation(@RequestParam("email") String email,
                                      @RequestParam("latitude") Double latitude,
                                      @RequestParam("longitude") Double longitude) {
         UserLocation userLocation;
-        userLocation = userLocationService.findFirstByUsername(username);
+        User user;
+        user  = userService.findByEmail(email);
+        userLocation = userLocationService.findFirstByUser(user);
         if (!Objects.equals(userLocation, null)) {
             userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
             userLocation.setLatitude(latitude);
             userLocation.setLongitude(longitude);
+            userLocation.setUser(user);
         } else {
             userLocation = new UserLocation();
-            userLocation.setUsername(username);
             userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
             userLocation.setLatitude(latitude);
             userLocation.setLongitude(longitude);
+            userLocation.setUser(user);
         }
         userLocationService.updateUserLocation(userLocation);
         return "success";

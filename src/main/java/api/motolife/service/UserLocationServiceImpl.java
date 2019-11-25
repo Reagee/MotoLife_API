@@ -1,5 +1,6 @@
 package api.motolife.service;
 
+import api.motolife.db.User;
 import api.motolife.db.UserLocation;
 import api.motolife.repository.UserLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserLocationServiceImpl implements UserLocationService {
     }
 
     @Override
-    public UserLocation findFirstByUsername(String username) {
-        return userLocationRepository.findFirstByUsername(username);
+    public UserLocation findFirstByUser(User user) {
+        return userLocationRepository.findFirstByUser(user);
     }
 }
