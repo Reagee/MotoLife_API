@@ -5,6 +5,8 @@ import api.motolife.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("userService")
 public class UserServiceImpl implements UserService{
 
@@ -24,5 +26,20 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<User> findAllById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public User findUserById(Integer id) {
+        return userRepository.findUserById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAllByIdIsNotNull();
     }
 }

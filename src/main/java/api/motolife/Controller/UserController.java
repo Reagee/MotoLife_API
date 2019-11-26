@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 public class UserController {
 
@@ -26,5 +28,13 @@ public class UserController {
         user.setToken(token);
         userService.updateUser(user);
         return "user_added";
+    }
+
+    @RequestMapping(value = "/getUsername")
+    public String getUsername(@RequestParam(name = "email") String email){
+        User user = userService.findByEmail(email);
+        if(!Objects.equals(user,null))
+            return user.getUsername();
+        return null;
     }
 }
