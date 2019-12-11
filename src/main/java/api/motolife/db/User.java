@@ -37,5 +37,12 @@ public class User implements Serializable {
             fetch = FetchType.LAZY)
     private UserLocation userLocation;
 
-
+    @Override
+    public String toString() {
+        return "User:\n"+
+                "Id:"+getId()+
+                ", Username: "+getUsername()+
+                ", Email: "+getEmail()+
+                ", Token: "+getToken() + "\n";
+    }
 }

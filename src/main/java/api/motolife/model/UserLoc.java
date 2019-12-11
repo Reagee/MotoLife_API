@@ -9,4 +9,9 @@ import lombok.Setter;
 public class UserLoc extends UserLocation {
     private String username;
     private String email;
+
+    @Override
+    public String toString() {
+        return "Username: "+getUsername() + ", Email: "+getEmail()+"\n";
+    }
 }

@@ -35,4 +35,14 @@ public class UserLocation implements Serializable {
     @Column(name = "longitude")
     @NotNull
     private Double longitude;
+
+    @Override
+    public String toString() {
+        return "UserLocation:\n"+
+                "Id:"+getId()+
+                ", User_id: "+getUser().getId()+
+                ", Last location update: "+getLast_location_update()+
+                ", Latitude: "+getLatitude() +
+                ", Longitude: "+getLongitude()+"\n";
+    }
 }

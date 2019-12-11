@@ -6,7 +6,6 @@ import api.motolife.model.UserLoc;
 import api.motolife.service.UserLocationService;
 import api.motolife.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +29,13 @@ public class UserLocationController {
     public String getUserLocations() throws JsonProcessingException {
         List<UserLocation> userLocations = userLocationService.findAll();
         List<User> usersList = userService.findAll();
+
         List<UserLoc> userLocList = new ArrayList<>();
-        UserLoc loc = new UserLoc();
+        UserLoc loc;
         ObjectMapper mapper = new ObjectMapper();
-        if (!Objects.equals(userLocations, null) && !Objects.equals(usersList,null)) {
-            for(int i=0;i<userLocations.size();i++){
+        if (!Objects.equals(userLocations, null) && !Objects.equals(usersList, null)) {
+            for (int i = 0; i < userLocations.size(); i++) {
+                loc = new UserLoc();
                 loc.setUsername(usersList.get(i).getUsername());
                 loc.setEmail(usersList.get(i).getEmail());
                 loc.setLast_location_update(userLocations.get(i).getLast_location_update());
@@ -42,6 +43,7 @@ public class UserLocationController {
                 loc.setLongitude(userLocations.get(i).getLongitude());
                 userLocList.add(loc);
             }
+
             return mapper.writeValueAsString(userLocList);
         }
         return mapper.writeValueAsString(null);
@@ -53,20 +55,15 @@ public class UserLocationController {
                                      @RequestParam("longitude") Double longitude) {
         UserLocation userLocation;
         User user;
-        user  = userService.findByEmail(email);
+        user = userService.findByEmail(email);
         userLocation = userLocationService.findFirstByUser(user);
-        if (!Objects.equals(userLocation, null)) {
-            userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
-            userLocation.setLatitude(latitude);
-            userLocation.setLongitude(longitude);
-            userLocation.setUser(user);
-        } else {
+        if (Objects.equals(userLocation, null)) {
             userLocation = new UserLocation();
-            userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
-            userLocation.setLatitude(latitude);
-            userLocation.setLongitude(longitude);
-            userLocation.setUser(user);
         }
+        userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
+        userLocation.setLatitude(latitude);
+        userLocation.setLongitude(longitude);
+        userLocation.setUser(user);
         userLocationService.updateUserLocation(userLocation);
         return "success";
     }
