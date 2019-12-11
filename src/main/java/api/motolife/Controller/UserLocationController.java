@@ -70,6 +70,6 @@ public class UserLocationController {
 
     @RequestMapping(value = "/")
     public String home() {
-        return "MotoLife API v1.0";
+        return "MotoLife API v1.1";
     }
 }
