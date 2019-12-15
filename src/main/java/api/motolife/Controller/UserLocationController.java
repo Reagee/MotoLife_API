@@ -33,14 +33,19 @@ public class UserLocationController {
         List<UserLoc> userLocList = new ArrayList<>();
         UserLoc loc;
         ObjectMapper mapper = new ObjectMapper();
-        if (!Objects.equals(userLocations, null) && !Objects.equals(usersList, null)) {
+        if (Objects.nonNull(userLocations) && Objects.nonNull(usersList)) {
             for (int i = 0; i < userLocations.size(); i++) {
-                loc = new UserLoc();
-                loc.setUsername(usersList.get(i).getUsername());
-                loc.setEmail(usersList.get(i).getEmail());
-                loc.setLast_location_update(userLocations.get(i).getLast_location_update());
-                loc.setLatitude(userLocations.get(i).getLatitude());
-                loc.setLongitude(userLocations.get(i).getLongitude());
+                User currentUser = usersList.get(i);
+                UserLocation currentUserLocation = userLocations.get(i);
+
+                loc = UserLoc.builder()
+                        .username(currentUser.getUsername())
+                        .email(currentUser.getEmail())
+                        .last_location_update(currentUserLocation.getLast_location_update())
+                        .latitute(currentUserLocation.getLatitude())
+                        .longitude(currentUserLocation.getLongitude())
+                        .build();
+
                 userLocList.add(loc);
             }
 
@@ -56,16 +61,18 @@ public class UserLocationController {
         UserLocation userLocation;
         User user;
         user = userService.findByEmail(email);
-        userLocation = userLocationService.findFirstByUser(user);
-        if (Objects.equals(userLocation, null)) {
-            userLocation = new UserLocation();
+        if (Objects.nonNull(user)) {
+            userLocation = UserLocation.builder()
+                    .last_location_update(new Timestamp((System.currentTimeMillis())))
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .user(user)
+                    .build();
+
+            userLocationService.updateUserLocation(userLocation);
+            return "success";
         }
-        userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
-        userLocation.setLatitude(latitude);
-        userLocation.setLongitude(longitude);
-        userLocation.setUser(user);
-        userLocationService.updateUserLocation(userLocation);
-        return "success";
+        return "cannot find user, location not updated";
     }
 
     @RequestMapping(value = "/")

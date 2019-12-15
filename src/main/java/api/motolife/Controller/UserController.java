@@ -22,10 +22,12 @@ public class UserController {
 
     @RequestMapping(value = "/addUser")
     public String addUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email, @RequestParam(name = "token") String token) {
-        User user = new User();
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setToken(token);
+        User user = User.builder()
+                .email(email)
+                .username(username)
+                .token(token)
+                .build();
+
         userService.updateUser(user);
         return "user_added";
     }
@@ -33,8 +35,6 @@ public class UserController {
     @RequestMapping(value = "/getUsername")
     public String getUsername(@RequestParam(name = "email") String email){
         User user = userService.findByEmail(email);
-        if(!Objects.equals(user,null))
-            return user.getUsername();
-        return null;
+        return Objects.nonNull(user)?user.getUsername():null;
     }
 }
