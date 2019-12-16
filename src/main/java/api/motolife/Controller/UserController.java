@@ -22,11 +22,10 @@ public class UserController {
 
     @RequestMapping(value = "/addUser")
     public String addUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email, @RequestParam(name = "token") String token) {
-        User user = User.builder()
-                .email(email)
-                .username(username)
-                .token(token)
-                .build();
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setToken(token);
 
         userService.updateUser(user);
         return "user_added";

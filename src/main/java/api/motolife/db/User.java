@@ -2,9 +2,7 @@ package api.motolife.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.Nullable;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +11,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "user")
 public class User implements Serializable {
 

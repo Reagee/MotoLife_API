@@ -37,15 +37,13 @@ public class UserLocationController {
             for (int i = 0; i < userLocations.size(); i++) {
                 User currentUser = usersList.get(i);
                 UserLocation currentUserLocation = userLocations.get(i);
-
-                loc = UserLoc.builder()
-                        .username(currentUser.getUsername())
-                        .email(currentUser.getEmail())
-                        .last_location_update(currentUserLocation.getLast_location_update())
-                        .latitute(currentUserLocation.getLatitude())
-                        .longitude(currentUserLocation.getLongitude())
-                        .build();
-
+                loc = new UserLoc();
+                loc.setEmail(currentUser.getEmail());
+                loc.setUsername(currentUser.getUsername());
+                loc.setUser(currentUser);
+                loc.setLast_location_update(currentUserLocation.getLast_location_update());
+                loc.setLatitude(currentUserLocation.getLatitude());
+                loc.setLongitude(currentUserLocation.getLongitude());
                 userLocList.add(loc);
             }
 
@@ -61,7 +59,15 @@ public class UserLocationController {
         UserLocation userLocation;
         User user;
         user = userService.findByEmail(email);
-        if (Objects.nonNull(user)) {
+        userLocation = userLocationService.findFirstByUser(user);
+        if(Objects.nonNull(userLocation)){
+            userLocation.setLast_location_update(new Timestamp(System.currentTimeMillis()));
+            userLocation.setLatitude(latitude);
+            userLocation.setLongitude(longitude);
+            userLocationService.updateUserLocation(userLocation);
+            return "success";
+        }
+        else if (Objects.nonNull(user)) {
             userLocation = UserLocation.builder()
                     .last_location_update(new Timestamp((System.currentTimeMillis())))
                     .latitude(latitude)
