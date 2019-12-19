@@ -16,8 +16,8 @@ public class UserTokenController {
     private UserService userService;
 
     @RequestMapping(value = "/setUserToken")
-    public String setUserToken(@RequestParam(name = "token") String token, @RequestParam(name = "username") String username) {
-        User user = userService.findByUsername(username);
+    public String setUserToken(@RequestParam(name = "token") String token, @RequestParam(name = "email") String email) {
+        User user = userService.findByEmail(email);
         if (Objects.nonNull(user)) {
             user.setToken(token);
             userService.updateUser(user);
